@@ -1,4 +1,4 @@
-[![license]([https://img.shields.io/badge/-LICENSE-green)](https://github.com/Aca4peop/CIQNet/blob/main/LICENSE](https://github.com/guyueyao/OmniVQA/blob/main/LICENSE))
+[![MIT license]([https://img.shields.io/badge/-LICENSE-green)](https://github.com/Aca4peop/CIQNet/blob/main/LICENSE](https://github.com/guyueyao/OmniVQA/blob/main/LICENSE)
 
 #   Distortion-Sensitive Masked Autoencoder for Omnidirectional Video Quality Assessment
 
