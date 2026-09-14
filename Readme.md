@@ -44,7 +44,7 @@ Click the hyper links to see the details of these datasets.
 # Usages
 
 We provide a pre-trained weights of DS-MAE, which you can use it to build your own OVQA models.
-See Release Assets to get the pre-trained weights.
+See [Release Assets](https://github.com/guyueyao/OmniVQA/releases/tag/weights) to get the pre-trained weights.
 
 ## 1. Directly use
 
