@@ -1,6 +1,7 @@
 '''
 This is the Code for Training DS-MAE
 '''
+import logging
 
 from prefetch_generator import BackgroundGenerator
 from tqdm import tqdm
@@ -21,6 +22,15 @@ from decord import VideoReader, cpu, gpu
 
 p_s = 16
 
+
+logging.basicConfig(
+
+    level=logging.INFO,  # 日志级别：DEBUG < INFO < WARNING < ERROR < CRITICAL
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    filename="SSL.log",  # 日志保存到这个文件
+    filemode="a"  # a=追加写入；w=每次运行覆盖旧日志
+)
 # The frozen encoder, for feature replay
 class Teacher(nn.Module):
     def __init__(self):
@@ -197,6 +207,9 @@ if __name__ == "__main__":
         msk_sum /= idx
 
         tqdm.write(
+            'epoch %d > tran loss : MSE %.6f, LWF %.6f, ssim %.6f | mask length %d ' % (epoch, l_t_mse, 0, l_t_ce, msk_sum))
+
+        logging.info(
             'epoch %d > tran loss : MSE %.6f, LWF %.6f, ssim %.6f | mask length %d ' % (epoch, l_t_mse, 0, l_t_ce, msk_sum))
 
         if epoch % 5 == 0 :

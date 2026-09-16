@@ -87,6 +87,7 @@ Run the CrossSetEval.py
 
 ## 4. Train DS-MAE
 Our pre-train dataset is available at  https://pan.baidu.com/s/1yp6pDBMjcSxqfSoYNExWWQ?pwd=ta38 .
+
 Run SSLTrain.py to pre-train DS-MAE.
 
 # Contact

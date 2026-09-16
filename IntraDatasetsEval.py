@@ -11,7 +11,16 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from scipy import stats
 from datasets.DataSource import ODVSource,JVQDSource,SVQDSource
+import logging
 
+logging.basicConfig(
+
+    level=logging.INFO,  # 日志级别：DEBUG < INFO < WARNING < ERROR < CRITICAL
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    filename="Train-Test.log",  # 日志保存到这个文件
+    filemode="a"  # a=追加写入；w=每次运行覆盖旧日志
+)
 class VideoFeat(Dataset):
     def __init__(self, images, dmos,fpath, vlengh):
         self.images = images
@@ -79,12 +88,13 @@ class OVQA(nn.Module):
 
 if __name__ == "__main__":
     # parameters
-    Videosource=ODVSource
-    feature_path='features/ODV'
+    Videosource=SVQDSource
+    feature_path='features/SVQD'
     video_length=300 #ODV: 300  JVQD:120 SVQD: 500
+    logging.info('DATASET SVQD')
     # torch.set_float32_matmul_precision('high')
     #
-    SEED = 0
+    SEED = 42
     np.random.seed(SEED)
     torch.manual_seed(SEED)
     torch.cuda.manual_seed_all(SEED)
@@ -162,8 +172,9 @@ if __name__ == "__main__":
                 brmse[r]=rmse1
                 checkpoint={"model_state_dict": model.state_dict()}
                 # torch.save(checkpoint,'./model/model_'+str(rounds_index)+'.pth')
-                print('epoch %d, plcc %.4f , srocc %.4f ,rmse %.4f,%.4f' % (r,plcc1, srocc1, rmse1,sroccbest))
-
-    print(np.mean(bsrcc))
-    print(np.mean(bplcc))
-    print(np.mean(brmse))
+                print('round %d, plcc %.4f , srocc %.4f ,rmse %.4f,%.4f' % (r,plcc1, srocc1, rmse1,sroccbest))
+                logging.info('round %d, plcc %.4f , srocc %.4f ,rmse %.4f,%.4f' % (r,plcc1, srocc1, rmse1,sroccbest))
+    logging.info('SRCC | PLCC | RMSE')
+    logging.info('%.4f | %.4f | %.4f' % (np.mean(bsrcc), np.mean(bplcc), np.mean(brmse)))
+    print('SRCC | PLCC | RMSE')
+    print('%.4f | %.4f | %.4f' % (np.mean(bsrcc), np.mean(bplcc), np.mean(brmse)))

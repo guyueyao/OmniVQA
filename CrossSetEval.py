@@ -11,8 +11,16 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from scipy import stats
 from datasets.DataSource import ODVSource, JVQDSource, SVQDSource, VRVQWSource
-import torch.nn.functional as F
+import logging
 
+logging.basicConfig(
+
+    level=logging.INFO,  # 日志级别：DEBUG < INFO < WARNING < ERROR < CRITICAL
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    filename="CrossEval.log",  # 日志保存到这个文件
+    filemode="a"  # a=追加写入；w=每次运行覆盖旧日志
+)
 class VideoFeat(Dataset):
     def __init__(self, images, dmos,fpath, vlengh):
         self.images = images
@@ -81,12 +89,13 @@ class OVQA(nn.Module):
 
 if __name__ == "__main__":
     #parameters
-    SrcSource=VRVQWSource
+    SrcSource=ODVSource
     TarSource=JVQDSource
-    feature_path_src = './features/VRVQW'
+    feature_path_src = './features/ODV'
     video_length_src = 300  # ODV: 300  JVQD:120 SVQD: 500
     feature_path_tar = './features/JVQD'
     video_length_tar = 120  # ODV: 300  JVQD:120 SVQD: 500
+    logging.info('SRC: ODV TAR: JVQD')
 
     #
     SEED = 42
@@ -172,4 +181,5 @@ if __name__ == "__main__":
 
         if abs(srocc1)>sroccbest:
             sroccbest=abs(srocc1)
+            logging.info('epoch %d,  srocc %.4f, plcc %.4f, rmse %.4f, %.4f' % (epoch, abs(srocc1),abs(plcc1),rmse1,sroccbest))
             print('epoch %d,  srocc %.4f, plcc %.4f, rmse %.4f, %.4f' % (epoch, abs(srocc1),abs(plcc1),rmse1,sroccbest))

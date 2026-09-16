@@ -315,7 +315,7 @@ class DecoderST(nn.Module):
 
     def infer(self, feat):  # B,T,N,512
         # feat = F.gelu(self.linear(feat))
-        feat = feat.unsqueeze(0)
+        # feat = feat.unsqueeze(0)
         # features.append(feat[0, :, 1:].mean(dim=1).to('cpu'))
         # features.append(feat[0, :, 0].to('cpu'))
         for blk in self.blocks:
@@ -387,19 +387,19 @@ class DSMAE(nn.Module):
         self.cls = nn.Sequential(nn.Linear(384 , 256),nn.GELU(),nn.Linear(256,18))
         self.proj=nn.Linear(384,384)
 
-    @torch.no_grad()
-    def forward(self, dis):
-        T, _, _, _ = dis.shape
-        feat = self.backbone.forward_features(dis)
-        feat = self.decoder.infer(feat)
-        feat = feat.to('cpu')
-        # feat = torch.cat((feat[:, 1:].mean(dim=1), feats), dim=-1)
-        # feat = torch.cat((feat[:, 0], feats), dim=-1)
-        return feat  # T C
+    # @torch.no_grad()
+    # def forward(self, dis):
+    #     T, _, _, _ = dis.shape
+    #     feat = self.backbone.forward_features(dis)
+    #     feat = self.decoder.infer(feat)
+    #     feat = feat.to('cpu')
+    #     # feat = torch.cat((feat[:, 1:].mean(dim=1), feats), dim=-1)
+    #     # feat = torch.cat((feat[:, 0], feats), dim=-1)
+    #     return feat  # T C
 
-    '''
+
     #Batch infer
-    def forward2(self, dis):
+    def forward(self, dis):
         B, T, _, _, _ = dis.shape
         dis = dis.view(B * T, 3, 384, 384)
         feat = self.backbone.forward_features(dis)
@@ -409,7 +409,7 @@ class DSMAE(nn.Module):
         # feat = torch.cat((feat[:, 1:].mean(dim=1), feats), dim=-1)
         # feat = torch.cat((feat[:, 0], feats), dim=-1)
         return feat  # T C
-    '''
+
 
     def lwf2(self,x,feats):
         B, T, _, _, _ = x.shape
